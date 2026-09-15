@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.julian.notificator_front.model.DestinationType;
 import com.julian.notificator_front.model.MessageRequest;
@@ -24,21 +25,66 @@ public class MessageController {
     @GetMapping("/")
     public String index(Model model) {
 
-        model.addAttribute("messageRequest", new MessageRequest());
+        model.addAttribute(
+                "messageRequest",
+                new MessageRequest()
+        );
 
-        model.addAttribute("destinations", DestinationType.values());
+        model.addAttribute(
+                "destinations",
+                DestinationType.values()
+        );
 
-        model.addAttribute("telegramDestinations",
-                DestinationTelegramType.values());
+        model.addAttribute(
+                "telegramDestinations",
+                DestinationTelegramType.values()
+        );
 
         return "index";
     }
 
     @PostMapping("/send")
     public String send(
-            @Valid MessageRequest messageRequest) {
+            @Valid MessageRequest messageRequest,
+            @RequestParam(
+                    name = "telegramAction",
+                    defaultValue = "NORMAL"
+            ) String telegramAction) {
 
-        messageService.sendMessage(messageRequest);
+        if (messageRequest.getDestination() != DestinationType.TELEGRAM) {
+
+            messageRequest.setTelegramPollRequest(null);
+
+            messageService.sendMessage(messageRequest);
+
+            return "redirect:/";
+        }
+
+        switch (telegramAction) {
+
+            case "PIN":
+
+                messageRequest.setTelegramPollRequest(null);
+
+                messageService.sendPinMessage(messageRequest);
+
+                break;
+
+            case "POLL":
+
+                messageService.sendPoll(messageRequest);
+
+                break;
+
+            case "NORMAL":
+            default:
+
+                messageRequest.setTelegramPollRequest(null);
+
+                messageService.sendMessage(messageRequest);
+
+                break;
+        }
 
         return "redirect:/";
     }

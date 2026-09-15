@@ -3,129 +3,249 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Notificator</title>
+    <title>Notificador</title>
 
     <link rel="stylesheet"
           th:href="@{/css/style.css}">
-
 </head>
 
 <body>
 
-<div class="page">
+<div class="page-container">
+
+    <header class="header">
+
+        <div class="logo">
+            ⚡
+        </div>
+
+        <div>
+            <h1>Notificador</h1>
+            <p>Envía mensajes a tus plataformas</p>
+        </div>
+
+    </header>
+
 
     <main class="card">
-
-        <!-- Header -->
-        <header class="header">
-
-            <div class="logo">
-                ⚡
-            </div>
-
-            <div>
-                <h1>Notificator</h1>
-                <p>Send your message</p>
-            </div>
-
-        </header>
-
 
         <form th:action="@{/send}"
               th:object="${messageRequest}"
               method="post">
 
+            <!-- DESTINO -->
 
-            <!-- Destination -->
             <div class="form-group">
 
                 <label for="destination">
-                    DESTINATION
+                    Destino
                 </label>
 
-                <div class="select-wrapper">
+                <select id="destination"
+                        th:field="*{destination}">
 
-                    <span class="input-icon">📡</span>
+                    <option th:each="destination : ${destinations}"
+                            th:value="${destination}"
+                            th:text="${destination}">
+                    </option>
 
-                    <select id="destination"
-                            th:field="*{destination}">
-
-                        <option th:each="destination : ${destinations}"
-                                th:value="${destination}"
-                                th:text="${destination}">
-                        </option>
-
-                    </select>
-
-                </div>
+                </select>
 
             </div>
 
 
-            <!-- Telegram destination -->
-            <div class="form-group telegram-group"
+            <!-- DESTINO TELEGRAM -->
+
+            <div class="form-group"
                  id="telegramDestinationGroup">
 
-                <label for="destinationTelegram">
-                    TELEGRAM DESTINATION
+                <label for="telegramDestination">
+                    Destino Telegram
                 </label>
 
-                <div class="select-wrapper">
+                <select id="telegramDestination"
+                        th:field="*{destinationTelegram}">
 
-                    <span class="input-icon">✈️</span>
+                    <option th:each="telegramDestination : ${telegramDestinations}"
+                            th:value="${telegramDestination}"
+                            th:text="${telegramDestination}">
+                    </option>
 
-                    <select id="destinationTelegram"
-                            th:field="*{destinationTelegram}">
-
-                        <option th:each="telegramDestination : ${telegramDestinations}"
-                                th:value="${telegramDestination}"
-                                th:text="${telegramDestination}">
-                        </option>
-
-                    </select>
-
-                </div>
+                </select>
 
             </div>
 
 
-            <!-- Message -->
-            <div class="form-group">
+            <!-- TIPO DE MENSAJE TELEGRAM -->
 
-                <div class="label-row">
+            <div class="form-group"
+                 id="telegramActionGroup">
+
+                <label for="telegramAction">
+                    Tipo de mensaje Telegram
+                </label>
+
+                <select id="telegramAction">
+
+                    <option value="NORMAL">
+                        MENSAJE NORMAL
+                    </option>
+
+                    <option value="PIN">
+                        MENSAJE ANCLADO
+                    </option>
+
+                    <option value="POLL">
+                        ENCUESTA
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!--
+                Valor utilizado por el backend para decidir
+                qué endpoint del notificator llamar.
+            -->
+
+            <input type="hidden"
+                   id="telegramActionValue"
+                   name="telegramAction"
+                   value="NORMAL">
+
+
+            <!-- MENSAJE NORMAL / ANCLADO -->
+
+            <div id="normalMessageGroup">
+
+                <div class="form-group">
 
                     <label for="message">
-                        MESSAGE
+                        Mensaje
                     </label>
 
-                    <span class="counter">
-                        <span id="characterCount">0</span> / 250
-                    </span>
+                    <textarea id="message"
+                              th:field="*{message}"
+                              maxlength="250"
+                              rows="5"
+                              placeholder="Escribe tu mensaje..."></textarea>
+
+                    <div class="character-counter">
+                        <span id="characterCount">0</span>/250
+                    </div>
 
                 </div>
-
-                <textarea id="message"
-                          th:field="*{message}"
-                          maxlength="250"
-                          rows="6"
-                          placeholder="Write your message..."></textarea>
 
             </div>
 
 
-            <!-- Submit -->
+            <!-- ENCUESTA -->
+
+            <div id="pollGroup"
+                 class="poll-container"
+                 style="display: none;">
+
+                <div class="form-group">
+
+                    <label for="pollQuestion">
+                        Pregunta
+                    </label>
+
+                    <textarea id="pollQuestion"
+                              th:field="*{telegramPollRequest.question}"
+                              maxlength="150"
+                              rows="3"
+                              placeholder="Escribe la pregunta..."></textarea>
+
+                    <div class="character-counter">
+                        <span id="pollQuestionCount">0</span>/150
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <div class="options-header">
+
+                        <label>
+                            Opciones
+                        </label>
+
+                        <span id="optionCount">
+                            2/10
+                        </span>
+
+                    </div>
+
+
+                    <div id="pollOptions">
+
+                        <div class="poll-option">
+
+                            <input type="text"
+                                   name="telegramPollRequest.options[0]"
+                                   maxlength="100"
+                                   placeholder="Opción 1">
+
+                        </div>
+
+
+                        <div class="poll-option">
+
+                            <input type="text"
+                                   name="telegramPollRequest.options[1]"
+                                   maxlength="100"
+                                   placeholder="Opción 2">
+
+                            <button type="button"
+                                    class="remove-option"
+                                    title="Eliminar opción">
+
+                                −
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <button type="button"
+                            id="addOption"
+                            class="add-option">
+
+                        +
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PIN -->
+
+            <input type="hidden"
+                   th:field="*{messagePayload.pin}"
+                   id="pin">
+
+
+            <!-- BOTÓN -->
+
             <button type="submit"
                     class="send-button">
 
-                <span>⚡</span>
+                <span>Enviar</span>
 
-                SEND MESSAGE
+                <span class="send-icon">
+                    ➤
+                </span>
 
             </button>
 
@@ -134,8 +254,8 @@
     </main>
 
 
-    <footer>
-        Notificator
+    <footer class="footer">
+        Notificador
     </footer>
 
 </div>

@@ -35,7 +35,7 @@ body {
    PAGE
    ========================= */
 
-.page {
+.page-container {
     min-height: 100vh;
 
     display: flex;
@@ -46,7 +46,6 @@ body {
 
     padding: 30px 20px;
 }
-
 
 /* =========================
    CARD
@@ -366,13 +365,12 @@ footer {
 
 @media (max-width: 600px) {
 
-    .page {
+    .page-container {
         padding: 15px;
     }
 
     .card {
         padding: 25px 20px;
-
         border-radius: 14px;
     }
 
@@ -383,4 +381,117 @@ footer {
     .header h1 {
         font-size: 24px;
     }
+}
+
+/* ==========================================
+   TELEGRAM POLL
+   ========================================== */
+
+.poll-container {
+    margin-top: 10px;
+}
+
+
+.options-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+
+.options-header label {
+    margin-bottom: 0;
+}
+
+
+#optionCount {
+    font-size: 0.8rem;
+    opacity: 0.65;
+}
+
+
+#pollOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.poll-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.poll-option input {
+    flex: 1;
+}
+
+
+.remove-option {
+    width: 38px;
+    height: 38px;
+
+    border: none;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    background: rgba(255, 255, 255, 0.08);
+    color: inherit;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.remove-option:hover {
+    background: rgba(255, 80, 80, 0.25);
+    transform: scale(1.05);
+}
+
+
+.add-option {
+    margin-top: 12px;
+
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 50%;
+
+    font-size: 26px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    background: rgba(255, 255, 255, 0.08);
+    color: inherit;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.add-option:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.08);
+}
+
+
+#telegramActionGroup {
+    transition:
+        opacity 0.2s ease,
+        max-height 0.2s ease;
 }

@@ -6,4 +6,7 @@ public interface MessageService {
 
     void sendMessage(MessageRequest messageRequest);
 
+    void sendPinMessage(MessageRequest messageRequest);
+
+    void sendPoll(MessageRequest messageRequest);
 }
