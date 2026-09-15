@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: notificator-front
+
+  thymeleaf:
+    cache: false
+
+server:
+  port: 8084
+
+notificator:
+  api:
+    url: http://jgf78.duckdns.org:8083
+    messages-path: /api/messages/send

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Notificator</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <main class="card">
+
+        <!-- Header -->
+        <header class="header">
+
+            <div class="logo">
+                ⚡
+            </div>
+
+            <div>
+                <h1>Notificator</h1>
+                <p>Send your message</p>
+            </div>
+
+        </header>
+
+
+        <form th:action="@{/send}"
+              th:object="${messageRequest}"
+              method="post">
+
+
+            <!-- Destination -->
+            <div class="form-group">
+
+                <label for="destination">
+                    DESTINATION
+                </label>
+
+                <div class="select-wrapper">
+
+                    <span class="input-icon">📡</span>
+
+                    <select id="destination"
+                            th:field="*{destination}">
+
+                        <option th:each="destination : ${destinations}"
+                                th:value="${destination}"
+                                th:text="${destination}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Telegram destination -->
+            <div class="form-group telegram-group"
+                 id="telegramDestinationGroup">
+
+                <label for="destinationTelegram">
+                    TELEGRAM DESTINATION
+                </label>
+
+                <div class="select-wrapper">
+
+                    <span class="input-icon">✈️</span>
+
+                    <select id="destinationTelegram"
+                            th:field="*{destinationTelegram}">
+
+                        <option th:each="telegramDestination : ${telegramDestinations}"
+                                th:value="${telegramDestination}"
+                                th:text="${telegramDestination}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Message -->
+            <div class="form-group">
+
+                <div class="label-row">
+
+                    <label for="message">
+                        MESSAGE
+                    </label>
+
+                    <span class="counter">
+                        <span id="characterCount">0</span> / 250
+                    </span>
+
+                </div>
+
+                <textarea id="message"
+                          th:field="*{message}"
+                          maxlength="250"
+                          rows="6"
+                          placeholder="Write your message..."></textarea>
+
+            </div>
+
+
+            <!-- Submit -->
+            <button type="submit"
+                    class="send-button">
+
+                <span>⚡</span>
+
+                SEND MESSAGE
+
+            </button>
+
+        </form>
+
+    </main>
+
+
+    <footer>
+        Notificator
+    </footer>
+
+</div>
+
+
+<script th:src="@{/js/message.js}"></script>
+
+</body>
+</html>
