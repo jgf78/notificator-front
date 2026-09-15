@@ -1,0 +1,10 @@
+services:
+
+  sportevents:
+    image: jgf78/notificator-front:latest
+    container_name: notificator-front
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
