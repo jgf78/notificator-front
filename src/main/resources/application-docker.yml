@@ -12,3 +12,5 @@ notificator:
   api:
     url: http://jgf78.duckdns.org:8083
     messages-path: /api/messages/send
+    send-pin-path: /api/messages/sendPin 
+    send-poll-path: /api/messages/sendPoll
