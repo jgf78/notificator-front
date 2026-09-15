@@ -15,6 +15,35 @@
 
 <body>
 
+<!-- NOTIFICACIÓN -->
+<div th:if="${successMessage}"
+     class="notification notification-success"
+     id="notification">
+
+    <span class="notification-icon">
+        ✓
+    </span>
+
+    <span th:text="${successMessage}">
+        ¡Mensaje enviado correctamente!
+    </span>
+
+</div>
+
+<div th:if="${errorMessage}"
+     class="notification notification-error"
+     id="notification">
+
+    <span class="notification-icon">
+        !
+    </span>
+
+    <span th:text="${errorMessage}">
+        No se ha podido enviar el mensaje.
+    </span>
+
+</div>
+
 <div class="page-container">
 
     <header class="header">

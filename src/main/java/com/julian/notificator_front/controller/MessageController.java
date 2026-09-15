@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.julian.notificator_front.model.DestinationType;
 import com.julian.notificator_front.model.MessageRequest;
@@ -49,41 +50,61 @@ public class MessageController {
             @RequestParam(
                     name = "telegramAction",
                     defaultValue = "NORMAL"
-            ) String telegramAction) {
+            ) String telegramAction,
+            RedirectAttributes redirectAttributes) {
 
-        if (messageRequest.getDestination() != DestinationType.TELEGRAM) {
+        try {
 
-            messageRequest.setTelegramPollRequest(null);
-
-            messageService.sendMessage(messageRequest);
-
-            return "redirect:/";
-        }
-
-        switch (telegramAction) {
-
-            case "PIN":
-
-                messageRequest.setTelegramPollRequest(null);
-
-                messageService.sendPinMessage(messageRequest);
-
-                break;
-
-            case "POLL":
-
-                messageService.sendPoll(messageRequest);
-
-                break;
-
-            case "NORMAL":
-            default:
+            if (messageRequest.getDestination() != DestinationType.TELEGRAM) {
 
                 messageRequest.setTelegramPollRequest(null);
 
                 messageService.sendMessage(messageRequest);
 
-                break;
+            } else {
+
+                switch (telegramAction) {
+
+                    case "PIN":
+
+                        messageRequest.setTelegramPollRequest(null);
+
+                        messageService.sendPinMessage(messageRequest);
+
+                        break;
+
+                    case "POLL":
+
+                        messageService.sendPoll(messageRequest);
+
+                        break;
+
+                    case "NORMAL":
+                    default:
+
+                        messageRequest.setTelegramPollRequest(null);
+
+                        messageService.sendMessage(messageRequest);
+
+                        break;
+                }
+            }
+
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "¡Mensaje enviado correctamente!"
+            );
+
+        } catch (Exception e) {
+
+            System.err.println(
+                    "ERROR AL ENVIAR MENSAJE: " + e.getMessage()
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "No se ha podido enviar el mensaje."
+            );
         }
 
         return "redirect:/";
