@@ -8,6 +8,9 @@ import org.springframework.web.client.RestClient;
 import com.julian.notificator_front.model.MessageRequest;
 import com.julian.notificator_front.service.MessageService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class MessageServiceImpl implements MessageService {
 
@@ -36,7 +39,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendMessage(MessageRequest messageRequest) {
         
-        System.out.println("ENVIANDO NORMAL: " + messageRequest);
+        log.info("ENVIANDO NORMAL: {}", messageRequest);
 
         restClient.post()
                 .uri(messagesPath)
@@ -49,7 +52,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendPinMessage(MessageRequest messageRequest) {
         
-        System.out.println("ENVIANDO ANCLADO: " + messageRequest);
+        log.info("ENVIANDO ANCLADO: {}", messageRequest);
 
         restClient.post()
                 .uri(sendPinPath)
@@ -62,7 +65,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void sendPoll(MessageRequest messageRequest) {
         
-        System.out.println("ENVIANDO ENCUESTA: " + messageRequest);
+        log.info("ENVIANDO ENCUESTA: {}", messageRequest);
 
         restClient.post()
                 .uri(sendPollPath)

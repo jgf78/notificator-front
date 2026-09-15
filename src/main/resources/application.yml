@@ -14,3 +14,14 @@ notificator:
     messages-path: /api/messages/send
     send-pin-path: /api/messages/sendPin 
     send-poll-path: /api/messages/sendPoll
+
+logging:
+  file:
+    path: ${LOG_PATH:./target/}
+    name: ${spring.application.name}
+
+  level:
+    com.julian: ${LOG_LEVEL_APP:DEBUG}
+    org.springframework.boot: ${LOG_LEVEL_SPRING_BOOT:INFO}
+    org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
+    
