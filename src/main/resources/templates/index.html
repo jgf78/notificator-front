@@ -64,10 +64,11 @@
 
         <form th:action="@{/send}"
               th:object="${messageRequest}"
-              method="post">
+              method="post"
+              enctype="multipart/form-data">
+
 
             <!-- DESTINO -->
-
             <div class="form-group">
 
                 <label for="destination">
@@ -88,7 +89,6 @@
 
 
             <!-- DESTINO TELEGRAM -->
-
             <div class="form-group"
                  id="telegramDestinationGroup">
 
@@ -110,7 +110,6 @@
 
 
             <!-- TIPO DE MENSAJE TELEGRAM -->
-
             <div class="form-group"
                  id="telegramActionGroup">
 
@@ -141,7 +140,6 @@
                 Valor utilizado por el backend para decidir
                 qué endpoint del notificator llamar.
             -->
-
             <input type="hidden"
                    id="telegramActionValue"
                    name="telegramAction"
@@ -149,7 +147,6 @@
 
 
             <!-- MENSAJE NORMAL / ANCLADO -->
-
             <div id="normalMessageGroup">
 
                 <div class="form-group">
@@ -173,8 +170,27 @@
             </div>
 
 
-            <!-- ENCUESTA -->
+            <!-- ADJUNTO -->
+            <div class="form-group"
+                 id="fileGroup"
+                 style="display: none;">
 
+                <label for="file">
+                    Adjunto
+                </label>
+
+                <input type="file"
+                       id="file"
+                       name="file">
+
+                <div id="selectedFile"
+                     class="selected-file">
+                </div>
+
+            </div>
+
+
+            <!-- ENCUESTA -->
             <div id="pollGroup"
                  class="poll-container"
                  style="display: none;">
@@ -259,18 +275,18 @@
 
 
             <!-- PIN -->
-
             <input type="hidden"
                    th:field="*{messagePayload.pin}"
                    id="pin">
 
 
             <!-- BOTÓN -->
-
             <button type="submit"
                     class="send-button">
 
-                <span>Enviar</span>
+                <span>
+                    Enviar
+                </span>
 
                 <span class="send-icon">
                     ➤

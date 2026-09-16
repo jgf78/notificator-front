@@ -45,6 +45,84 @@ document.addEventListener("DOMContentLoaded", function () {
     const optionCount =
         document.getElementById("optionCount");
 
+    const fileGroup =
+        document.getElementById("fileGroup");
+
+    const file =
+        document.getElementById("file");
+
+    const selectedFile =
+        document.getElementById("selectedFile");
+
+
+    /*
+     * ==========================================
+     * ADJUNTOS
+     * ==========================================
+     */
+
+    function updateFileVisibility() {
+
+        const isTelegram =
+            destination.value === "TELEGRAM";
+
+        const isNormal =
+            telegramAction.value === "NORMAL";
+
+        const destinationAllowsFile =
+            destination.value === "DISCORD" ||
+            destination.value === "MAIL";
+
+        /*
+         * Discord y Mail:
+         * siempre permiten adjunto porque
+         * solo tienen mensaje normal.
+         *
+         * Telegram:
+         * solo permite adjunto en NORMAL.
+         */
+
+        const showFile =
+            destinationAllowsFile ||
+            (isTelegram && isNormal);
+
+        fileGroup.style.display =
+            showFile ? "block" : "none";
+
+        /*
+         * Si el adjunto deja de estar permitido,
+         * eliminamos el archivo seleccionado.
+         */
+
+        if (!showFile) {
+
+            file.value = "";
+
+            selectedFile.textContent = "";
+        }
+    }
+
+
+    /*
+     * Mostrar nombre del archivo seleccionado
+     */
+
+    file.addEventListener("change", function () {
+
+        if (!file.files || file.files.length === 0) {
+
+            selectedFile.textContent = "";
+
+            return;
+        }
+
+        const selected =
+            file.files[0];
+
+        selectedFile.textContent =
+            "📎 " + selected.name;
+    });
+
 
     /*
      * ==========================================
@@ -82,6 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!isTelegram) {
 
             telegramAction.value = "NORMAL";
+
             telegramActionValue.value = "NORMAL";
 
             pin.value = "false";
@@ -91,6 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             pollGroup.style.display =
                 "none";
+
+            updateFileVisibility();
 
             return;
         }
@@ -102,6 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
          */
 
         telegramAction.value = "NORMAL";
+
         telegramActionValue.value = "NORMAL";
 
         updateMessageType();
@@ -175,6 +257,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             pin.value = "false";
         }
+
+
+        /*
+         * Actualizamos la visibilidad del adjunto
+         * después de cambiar el tipo de mensaje.
+         */
+
+        updateFileVisibility();
     }
 
 

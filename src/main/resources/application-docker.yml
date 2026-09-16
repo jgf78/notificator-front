@@ -14,3 +14,4 @@ notificator:
     messages-path: /api/messages/send
     send-pin-path: /api/messages/sendPin 
     send-poll-path: /api/messages/sendPoll
+    send-file-path: /api/messages/sendFile

@@ -5,6 +5,11 @@ spring:
   thymeleaf:
     cache: false
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 server:
   port: 8084
 
@@ -14,6 +19,7 @@ notificator:
     messages-path: /api/messages/send
     send-pin-path: /api/messages/sendPin 
     send-poll-path: /api/messages/sendPoll
+    send-file-path: /api/messages/sendFile
 
 logging:
   file:
