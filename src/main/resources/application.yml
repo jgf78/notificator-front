@@ -12,7 +12,10 @@ spring:
 
 server:
   port: 8084
-
+  servlet:
+    session:
+      tracking-modes: cookie
+  
 notificator:
   api:
     url: http://jgf78.duckdns.org:8083
