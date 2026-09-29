@@ -95,9 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
          */
 
         if (!showFile) {
-
             file.value = "";
-
             selectedFile.textContent = "";
         }
     }
@@ -110,9 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
     file.addEventListener("change", function () {
 
         if (!file.files || file.files.length === 0) {
-
             selectedFile.textContent = "";
-
             return;
         }
 
@@ -135,6 +131,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const isTelegram =
             destination.value === "TELEGRAM";
 
+        /*
+         * Validación inicial de los campos.
+         */
+
+        message.required = true;
+        pollQuestion.required = false;
 
         /*
          * Los campos específicos de Telegram
@@ -160,9 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!isTelegram) {
 
             telegramAction.value = "NORMAL";
-
             telegramActionValue.value = "NORMAL";
-
             pin.value = "false";
 
             normalMessageGroup.style.display =
@@ -183,7 +183,6 @@ document.addEventListener("DOMContentLoaded", function () {
          */
 
         telegramAction.value = "NORMAL";
-
         telegramActionValue.value = "NORMAL";
 
         updateMessageType();
@@ -200,6 +199,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const action =
             telegramAction.value;
+
+        /*
+         * Validación de campos obligatorios.
+         *
+         * POLL:
+         * la pregunta es obligatoria.
+         *
+         * NORMAL y PIN:
+         * el mensaje es obligatorio.
+         */
+
+        if (action === "POLL") {
+
+            message.required = false;
+            pollQuestion.required = true;
+
+            message.setCustomValidity("");
+            pollQuestion.setCustomValidity("");
+
+        } else {
+
+            message.required = true;
+            pollQuestion.required = false;
+
+            message.setCustomValidity("");
+            pollQuestion.setCustomValidity("");
+        }
 
 
         /*
@@ -394,9 +420,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <button type="button"
                     class="remove-option"
                     title="Eliminar opción">
-
                 −
-
             </button>
         `;
 
@@ -445,6 +469,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /*
      * ==========================================
+     * VALIDACIÓN DEL FORMULARIO
+     * ==========================================
+     */
+
+    document.querySelector("form").addEventListener(
+        "submit",
+        function (event) {
+
+            const isPoll =
+                destination.value === "TELEGRAM" &&
+                telegramAction.value === "POLL";
+
+            const requiredField =
+                isPoll ? pollQuestion : message;
+
+            /*
+             * Evitamos enviar campos vacíos
+             * o que contengan únicamente espacios.
+             */
+
+            if (!requiredField.value.trim()) {
+
+                event.preventDefault();
+
+                requiredField.setCustomValidity(
+                    "Este campo es obligatorio."
+                );
+
+                requiredField.reportValidity();
+
+                requiredField.focus();
+            }
+        }
+    );
+
+
+    /*
+     * ==========================================
      * EVENTOS
      * ==========================================
      */
@@ -463,13 +525,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     message.addEventListener(
         "input",
-        updateCharacterCount
+        function () {
+
+            message.setCustomValidity("");
+
+            updateCharacterCount();
+        }
     );
 
 
     pollQuestion.addEventListener(
         "input",
-        updatePollQuestionCount
+        function () {
+
+            pollQuestion.setCustomValidity("");
+
+            updatePollQuestionCount();
+        }
     );
 
 
