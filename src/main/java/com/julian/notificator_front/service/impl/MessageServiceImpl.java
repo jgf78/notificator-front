@@ -88,7 +88,7 @@ public class MessageServiceImpl implements MessageService {
         restClient.post()
                 .uri(sendPollPath)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(messageRequest.getTelegramPollRequest())
+                .body(messageRequest)
                 .retrieve()
                 .toBodilessEntity();
     }
